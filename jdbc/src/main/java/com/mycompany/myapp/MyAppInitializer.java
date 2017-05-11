@@ -1,6 +1,8 @@
 package com.mycompany.myapp;
 
+import com.mycompany.myapp.config.Datasourceconfiguration;
 import com.mycompany.myapp.config.MyAppConfiguration;
+import com.mycompany.myapp.config.WebSecurityConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
@@ -9,7 +11,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class MyAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{MyAppConfiguration.class};
+        return new Class[]{MyAppConfiguration.class, WebSecurityConfig.class, Datasourceconfiguration.class};
     }
 
     @Override
