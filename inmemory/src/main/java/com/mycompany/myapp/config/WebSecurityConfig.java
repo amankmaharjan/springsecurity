@@ -1,11 +1,13 @@
 package com.mycompany.myapp.config;
 
+import com.mycompany.myapp.security.MyBasicAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 /**
  * Created by aman on 5/1/17.
@@ -13,30 +15,29 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-//        manager.createUser(User.withUsername("user").password("password").roles("USER").build());
-//        return manager;
-//    }
-
-
     @Autowired
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("USER");
-        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
-        auth.inMemoryAuthentication().withUser("dba").password("root123").roles("ADMIN", "DBA");//dba have two roles.
-    }
+    private MyBasicAuthenticationEntryPoint authenticationEntryPoint;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests().anyRequest().authenticated()
+        http.authorizeRequests()
+                .antMatchers("/api").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .formLogin()
+                .httpBasic()
                 .and()
-                .httpBasic();
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
-
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .inMemoryAuthentication()
+                .withUser("user").password("password").roles("USER")
+                .and()
+                .withUser("aman").password("abc").roles("ADMIN");
+        ;
+    }
 }

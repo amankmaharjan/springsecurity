@@ -8,8 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class HelloWorldRestController {
-    @RequestMapping("/api")
+    @RequestMapping("/")
     public String welcome() {
         return "welcome to Rest Template Example";
     }
+
+    @RequestMapping("/api")
+    public String api() {
+        return "welcome to Rest Api";
+    }
 }
+
