@@ -15,7 +15,6 @@ import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 /**
  * Created by aman on 5/1/17.
@@ -30,18 +29,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .antMatchers("/api").hasRole("ADMIN")
-//                .anyRequest().permitAll()
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .csrf().disable();
-//
-//        http.addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class);
-//        http.requiresChannel()
-//                .antMatchers("/api").requiresSecure();
         http
                 .csrf().disable()
                 .anonymous().disable()
@@ -71,10 +58,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.userDetailsServiceBean();
     }
 
-    @Bean
-    public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
-    }
+//    @Bean
+//    public TokenStore tokenStore() {
+//        return new InMemoryTokenStore();
+//    }
 
     @Bean
     @Autowired
@@ -93,6 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         store.setTokenStore(tokenStore);
         return store;
     }
+
 
 
 }
